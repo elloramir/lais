@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  # django app
+  web:
+    build:
+      context: .
+    environment:
+      - DB_ENGINE=postgresql
+      - DB_NAME=lais
+      - DB_HOST=database
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    ports:
+      - 8000:8000
+    command: ./src/manage.py runserver 0.0.0.0:8000
+
+  # creating database on a separate container from the django app
+  # because the django app container must be destroyed and recreated many times
+  # during development, and we don't want to lose the database every time
+  database:
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=lais
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
