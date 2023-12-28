@@ -9,8 +9,6 @@ class GrupoAtendimento(models.Model):
     def __str__(self):
         return self.nome
 
-# Represents candidate data, including personal
-# information and eligibility status for scheduling.
 class Candidato(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nome_completo = models.CharField(max_length=255)

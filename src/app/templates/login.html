@@ -3,6 +3,8 @@
 
 {% block content %}
 <form action="/" method="post" class="form-login">
+	{% csrf_token %}
+
 	<header class="login-header">
 		<h3>Entrada</h3>
 	</header>
