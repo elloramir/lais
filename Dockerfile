@@ -9,8 +9,8 @@ COPY . .
 
 RUN \
 	# configure timezone
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone && \
+	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
+	echo $TZ > /etc/timezone && \
 	# install python deps
 	pip install -r requirements.txt
 
