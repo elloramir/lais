@@ -1,12 +1,14 @@
+# TODO(ellora): move enviorment variables to a .env file 
 version: '3.9'
 
 services:
   # django app
-  web:
+  app:
     build:
       context: .
+    volumes:
+      - .:/app
     environment:
-      - DB_ENGINE=postgresql
       - DB_NAME=lais
       - DB_HOST=database
       - DB_USER=postgres
