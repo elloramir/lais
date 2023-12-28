@@ -1,11 +1,38 @@
 {% load static %}
-
 <html>
-<head>
-	<title>My App</title>
-	<link rel="stylesheet" href="{% static 'index.css' %}">
-</head>
-<body>
-	<h1>Hello sailor</h1>
-</body>
+	<head>
+		<title>Exames COVID-19</title>
+		<link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,">
+		<link rel="stylesheet" href="{% static 'index.css' %}">
+	</head>
+	<body>
+		<form action="/" method="post" class="form-login">
+			<header class="login-header">
+				<h3>Auto cadastro</h3>
+			</header>
+
+			<div class="login-body">
+				<div class="form-field">
+					<input type="text" placeholder="Nome completo" required>
+				</div>
+				<div class="form-field">
+					<input type="text" placeholder="CPF" required>
+				</div>
+				<div class="form-field">
+					<input type="date" placeholder="Data de nascimento" required>
+				</div>
+				<div class="form-field">
+					<input type="text" placeholder="Grupos" required>
+				</div>
+				<div class="form-field">
+					<input type="password" placeholder="Senha" required>
+				</div>
+			</div>
+
+			<footer class="login-footer">
+				<a href="#">Entrar na conta</a>
+				<input type="submit" value="Cadastrar-se">
+			</footer>
+		</form>
+	</body>
 </html>

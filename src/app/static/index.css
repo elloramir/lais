@@ -1,3 +1,87 @@
+/*
+	TODO(ellora):
+	Move to a separate file
+*/
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
 body {
-	background-color: aqua;
+	background-color: #eaeaea;
+	font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+/* align center */
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
+.form-login {
+	max-width: 450px;
+	width: 90%;
+	background-color: #fff;
+	border-radius: 7px;
+	overflow: hidden;
+}
+
+.form-login .login-header {
+	background-color: #282830;
+	color: #fff;
+	padding: 1.5em;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.form-login .login-body {
+	padding: 1.5em;
+}
+
+.form-login .form-field input {
+	border: 1px solid #d3d2d2;
+	padding: 1.2em;
+	outline: none;
+	width: 100%;
+	border-bottom: none;
+}
+
+.form-login input[type="submit"] {
+	background-color: #282830;
+	color: #fff;
+	padding: 1em 2em;
+	border: none;
+	border-radius: 5px;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+/* place holder color */
+.form-login input::placeholder {
+	color: #000;
+}
+
+/* border at last child */
+.form-login .login-body .form-field:last-child input {
+	border-bottom: 1px solid #d3d2d2;
+}
+
+/* border radius at first child and last child */
+.form-login .login-body .form-field:first-child input {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+.form-login .login-body .form-field:last-child input {
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.form-login .login-footer {
+	padding: 0 1.5em 1.5em 1.5em;
+	display: flex;
+	justify-content:space-between;
+	align-items: center;
 }
