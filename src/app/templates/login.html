@@ -1,8 +1,9 @@
 {% extends 'index.html' %}
+{% load widget_tweaks %}
 {% load static %}
 
 {% block content %}
-<form action="/" method="post" class="form-login">
+<form method="post" class="form-login" action="{% url 'login' %}">
 	{% csrf_token %}
 
 	<header class="login-header">
@@ -11,15 +12,15 @@
 
 	<div class="login-body">
 		<div class="form-field">
-			<input type="text" placeholder="CPF" required>
+			{% render_field form_login.cpf type="text" placeholder="CPF" %}
 		</div>
 		<div class="form-field">
-			<input type="password" placeholder="Senha" required>
+			{% render_field form_login.senha type="password" placeholder="Senha" %}
 		</div>
 	</div>
 
 	<footer class="login-footer">
-		<a href="{% url 'register' %}">Registrar-se</a>
+		<a href="{% url 'register' %}">Registrar-se?</a>
 		<input type="submit" value="Entrar">
 	</footer>
 </form>

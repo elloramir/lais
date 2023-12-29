@@ -1,8 +1,9 @@
 {% extends 'index.html' %}
+{% load widget_tweaks %}
 {% load static %}
 
 {% block content %}
-<form action="/" method="post" class="form-login">
+<form method="post" class="form-login" action="{% url 'register' %}">
 	{% csrf_token %}
 
 	<header class="login-header">
@@ -11,32 +12,32 @@
 
 	<div class="login-body">
 		<div class="form-field">
-			<input type="text" placeholder="Nome completo" required>
+			{% render_field form_candidato.nome_completo type="text" placeholder="Nome completo" %}
 		</div>
 		<div class="form-field">
-			<input type="text" placeholder="CPF" required>
+			{% render_field form_candidato.cpf type="text" placeholder="CPF" %}
 		</div>
 		<div class="form-field">
-			<input type="date" placeholder="Data de nascimento" required>
+			{% render_field form_candidato.data_nascimento type="date" %}
 		</div>
 		<div class="form-field">
-			<input type="text" placeholder="Grupos" required>
+			<!-- {% render_field form_candidato.grupos_atendimento %} -->
 		</div>
 		<!-- TODO(ellora): Implement this field -->
-		<!-- <div class="form-field">
-			<span>Teve COVID nos últimos 30 dias?</span>
-			<input type="checkbox" required>
-		</div> -->
 		<div class="form-field">
-			<input type="password" placeholder="Senha" required>
+			<!-- <span>Teve COVID nos últimos 30 dias?</span> -->
+			<!-- {% render_field form_candidato.teve_covid_recentemente %} -->
 		</div>
 		<div class="form-field">
-			<input type="password" placeholder="Confirmar senha" required>
+			{% render_field form_candidato.senha type="password" placeholder="Senha" %}
+		</div>
+		<div class="form-field">
+			{% render_field form_candidato.confirmacao_senha type="password" placeholder="Confirmar senha" %}
 		</div>
 	</div>
 
 	<footer class="login-footer">
-		<a href="{% url 'login' %}">Entrar na conta</a>
+		<a href="{% url 'login' %}">Entrar na conta?</a>
 		<input type="submit" value="Cadastrar-se">
 	</footer>
 </form>
