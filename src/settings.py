@@ -18,7 +18,7 @@ ALLOWED_HOSTS = []
 # Application definition
 INSTALLED_APPS = [
     'widget_tweaks',
-    'app.apps.AppConfig',
+    'src.apps.AppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -37,7 +37,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'app.urls'
+ROOT_URLCONF = 'src.urls'
 
 TEMPLATES = [
     {
@@ -57,7 +57,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = 'src.wsgi.application'
 
 
 # Database
@@ -94,7 +94,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'app/static',
+    BASE_DIR / 'src/static',
     # '/var/www/static/',
 ]
 

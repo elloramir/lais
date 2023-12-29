@@ -15,7 +15,7 @@ services:
       - DB_PASSWORD=postgres
     ports:
       - 8000:8000
-    command: ./src/manage.py runserver 0.0.0.0:8000
+    command: ./manage.py runserver 0.0.0.0:8000
 
   # creating database on a separate container from the django app
   # because the django app container must be destroyed and recreated many times
