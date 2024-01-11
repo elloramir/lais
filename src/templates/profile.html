@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+<h1>Hello autenticated user</h1>
+<p>Nome: {{ candidato.nome_completo }}</p>
+<p>CPF: {{ candidato.cpf }}</p>
+<p>Data de nascimento: {{ candidato.data_nascimento }}, {{ candidato.idade }} anos</p>
+<p>{{ candidato.apto_agendamento|yesno:"Apto,Inapto" }} ao agendamento</p>
+
+<button onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+
+{% if candidato.apto_agendamento %}
+<button onclick="window.location.href='{% url 'agendamento' %}'">Realizar agendamento</button>
+{% endif %}
+
+{% endblock %}

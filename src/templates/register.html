@@ -2,6 +2,10 @@
 {% load widget_tweaks %}
 {% load static %}
 
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
 {% block content %}
 <form method="post" class="form-login" action="{% url 'register' %}">
 	{% csrf_token %}
@@ -25,8 +29,8 @@
 		</div>
 		<!-- TODO(ellora): Implement this field -->
 		<div class="form-field">
-			<!-- <span>Teve COVID nos últimos 30 dias?</span> -->
-			<!-- {% render_field form_candidato.teve_covid_recentemente %} -->
+			<span>Teve COVID nos últimos 30 dias?</span>
+			{% render_field form_candidato.teve_covid_recentemente %}
 		</div>
 		<div class="form-field">
 			{% render_field form_candidato.senha type="password" placeholder="Senha" %}

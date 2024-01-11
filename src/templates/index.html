@@ -12,10 +12,11 @@
 		<meta name="language" content="Portuguese">
 
 		<link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;base64,">
-		<link rel="stylesheet" href="{% static 'index.css' %}">
+		<link rel="stylesheet" href="{% static 'css/index.css' %}">
+
+		{% block head %} {% endblock %}
 	</head>
 	<body>
-		{% block content %}
-		{% endblock %}
+		{% block content %} {% endblock %}
 	</body>
 </html>
