@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
 from django.contrib.auth import models as auth_models, logout as auth_logout
 
@@ -32,6 +33,10 @@ def login(request):
 
 			# get next page to redirect
 			next_page = request.GET.get('next') or 'profile'
+
+			# if user is staff, redirect to "estabelecimentos"
+			if request.user.is_staff and next_page == 'profile':
+				next_page = 'estabelecimentos'
 
 			return redirect(next_page)
 		else:
@@ -80,19 +85,23 @@ def register(request):
 @login_required
 def profile(request):
 	candidato = models.Candidato.objects.get(user=request.user)
+	form_agendamento = forms.Agendamento()
+	form_agendamento.fix_horario(candidato)
 
 	return render(request, 'profile.html', {
-		'candidato': candidato
+		'candidato': candidato,
+		'form_agendamento': form_agendamento
 	})
 
 
 @require_GET
-@login_required
+@staff_member_required(login_url='login')
 def estabelecimentos(request):
 	estabelecimentos = models.Estabelecimento.objects.all()
 	filter = forms.EstabelecimentoFilter(request.GET)
 
-	if filter.is_valid():
+	if filter.is_valid() and filter.has_changed():
+		# we should use icontains because those fields cold be null
 		estabelecimentos = estabelecimentos.filter(
 			cnes__icontains=filter.cleaned_data.get('cnes') or '',
 			razao_social__icontains=filter.cleaned_data.get('razao_social') or '')
@@ -101,3 +110,27 @@ def estabelecimentos(request):
 		'estabelecimentos': estabelecimentos,
 		'filter': filter
 	})
+
+
+@require_POST
+@login_required
+def agendamento(request):
+	candidato = models.Candidato.objects.get(user=request.user)
+
+	if not candidato.apto_agendamento():
+		return redirect('profile')
+
+	form_agendamento = forms.Agendamento(request.POST)
+
+	form_agendamento.is_valid()
+	# if form_agendamento.is_valid():
+	estabelecimento = form_agendamento.cleaned_data.get('estabelecimento')
+	time = form_agendamento.cleaned_data.get('horario')
+	agendamento = models.Agendamento()
+
+	if agendamento.scheduler(candidato, estabelecimento, "15"):
+		print('Agendamento realizado com sucesso')
+	else:
+		print('Agendamento não pode ser realizado')
+
+	return redirect('profile')

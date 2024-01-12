@@ -12,7 +12,13 @@
 <button onclick="window.location.href='{% url 'logout' %}'">Logout</button>
 
 {% if candidato.apto_agendamento %}
-<button onclick="window.location.href='{% url 'agendamento' %}'">Realizar agendamento</button>
+<h2>Agendamento</h2>
+<form method="POST" action="{% url 'agendamento' %}">
+	{% csrf_token %}
+	{% render_field form_agendamento.estabelecimento %}
+	{% render_field form_agendamento.horario %}
+	<button type="submit">Agendar</button>
+</form>
 {% endif %}
 
 {% endblock %}

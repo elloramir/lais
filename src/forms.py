@@ -16,15 +16,15 @@ class Login(forms.Form):
 
         # find user
         cpf = self.cleaned_data.get('cpf')
-        candidato = models.Candidato.objects.filter(cpf=cpf).first()
-        if candidato is None:
-            self.add_error('senha', 'CPF ou senha incorretos')
+        user = models.User.objects.filter(username=cpf).first()
+        if not user:
+            self.add_error('cpf', 'CPF ou senha incorretos')
             return False
 
         # validate password
         senha = self.cleaned_data.get('senha')
-        if not candidato.user.check_password(senha):
-            self.add_error('senha', 'CPF ou senha incorretos')
+        if not user.check_password(senha):
+            self.add_error('cpf', 'CPF ou senha incorretos')
             return False
 
         return True
@@ -75,3 +75,26 @@ class Candidato(forms.ModelForm):
 class EstabelecimentoFilter(forms.Form):
     cnes = forms.CharField(required=False)
     razao_social = forms.CharField(required=False)
+
+
+class Agendamento(forms.ModelForm):
+    horario = forms.ChoiceField(required=True)
+
+    class Meta:
+        model = models.Agendamento
+        fields = ['estabelecimento']
+
+    def fix_horario(self, candidato):
+        age = candidato.idade()
+        # hour = timezone.now().hour
+        hour = 14
+        horarios = []
+        if age >= 18 and age <= 29 and hour <= 13: horarios.append('13:00')
+        if age >= 30 and age <= 39 and hour <= 14: horarios.append('14:00')
+        if age >= 40 and age <= 49 and hour <= 15: horarios.append('15:00')
+        if age >= 50 and age <= 59 and hour <= 16: horarios.append('16:00')
+        if age >= 60: horarios.append('17:00')
+
+        sufix = timezone.now().strftime(' - %A de %B de %Y')
+        self.fields['horario'].choices = [(h, h+sufix) for h in horarios]
+
