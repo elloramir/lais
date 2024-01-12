@@ -70,3 +70,8 @@ class Candidato(forms.ModelForm):
             return False
 
         return True
+
+
+class EstabelecimentoFilter(forms.Form):
+    cnes = forms.CharField(required=False)
+    razao_social = forms.CharField(required=False)

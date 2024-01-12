@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+<h1>Estabelecimentos</h1>
+
+<form method="get">
+	{{ filter }}
+	<input type="submit" value="Filtrar">
+</form>
+
+{% if estabelecimentos %}
+	{% for estabelecimento in estabelecimentos %}
+		<p>{{ estabelecimento.cnes }}</p>
+		<p>{{ estabelecimento.razao_social }}</p>
+		<hr>
+	{% endfor %}
+{% else %}
+	<p>Nenhum estabelecimento cadastrado.</p>
+{% endif %}
+
+{% endblock %}

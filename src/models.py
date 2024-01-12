@@ -47,3 +47,17 @@ class Candidato(models.Model):
 
     def __str__(self):
         return self.nome_completo
+
+
+class Estabelecimento(models.Model):
+    cnes = models.CharField(max_length=7, unique=True)
+    razao_social = models.CharField(max_length=255)
+    nome_fantasia = models.CharField(max_length=255)
+    logadouro = models.CharField(max_length=255)
+    endereco = models.CharField(max_length=255)
+    bairro = models.CharField(max_length=255)
+    cep = models.CharField(max_length=8)
+    telefone = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.nome_fantasia

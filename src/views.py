@@ -84,3 +84,20 @@ def profile(request):
 	return render(request, 'profile.html', {
 		'candidato': candidato
 	})
+
+
+@require_GET
+@login_required
+def estabelecimentos(request):
+	estabelecimentos = models.Estabelecimento.objects.all()
+	filter = forms.EstabelecimentoFilter(request.GET)
+
+	if filter.is_valid():
+		estabelecimentos = estabelecimentos.filter(
+			cnes__icontains=filter.cleaned_data.get('cnes') or '',
+			razao_social__icontains=filter.cleaned_data.get('razao_social') or '')
+
+	return render(request, 'estabelecimentos.html', {
+		'estabelecimentos': estabelecimentos,
+		'filter': filter
+	})
