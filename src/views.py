@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
 from django.contrib.auth import models as auth_models, logout as auth_logout
+from json import dumps as json_dumps
 
 from . import forms
 from . import models
@@ -134,3 +135,49 @@ def agendamento(request):
 		print('Agendamento não pode ser realizado')
 
 	return redirect('profile')
+
+
+@require_GET
+@login_required
+def agendamentos(request):
+	candidato = models.Candidato.objects.get(user=request.user)
+	agendamentos = models.Agendamento.objects.filter(candidato=candidato)
+
+	return render(request, 'agendamentos.html', {
+		'agendamentos': agendamentos
+	})
+
+
+@require_GET
+@staff_member_required(login_url='login')
+def graficos(request):
+	estabelecimentos = models.Estabelecimento.objects.all()
+	labels = estabelecimentos.values_list('razao_social', flat=True)
+	data = []
+
+	for it in estabelecimentos:
+		data.append(it.agendamento_set.count())
+
+	candidatos = models.Candidato.objects.all()
+	aptos_and_not = [0, 0]
+
+	for it in candidatos:
+		if it.apto_agendamento():
+			aptos_and_not[0] += 1
+		else:
+			aptos_and_not[1] += 1
+
+
+
+	# This is not the fastest way to do dump those lists,
+	# but it's safe enough and will be only accessed by staff
+	# (which is a very small group of users).
+	str_labels = json_dumps(list(labels))
+	str_data = json_dumps(data)
+	str_aptos_and_not = json_dumps(aptos_and_not)
+
+	return render(request, 'graficos.html', {
+		'labels': str_labels,
+		'data': str_data,
+		'aptos_and_not': str_aptos_and_not
+	})

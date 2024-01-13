@@ -9,6 +9,7 @@ services:
     volumes:
       - .:/app
     environment:
+      - DB_ENGINE=postgresql
       - DB_NAME=lais
       - DB_HOST=database
       - DB_USER=postgres

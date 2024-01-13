@@ -78,6 +78,9 @@ class Agendamento(models.Model):
     data_hora = models.DateTimeField()
     data_criacao = models.DateTimeField(auto_now_add=True)
 
+    def already_gone(self):
+        return self.data_hora < timezone.now()
+
     def scheduler(self, candidato, estabelecimento, horas_str):
         if not estabelecimento.drop_vaga():
             return False

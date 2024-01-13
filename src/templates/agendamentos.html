@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<h1>Agendamentos</h1>
+
+{% for self in agendamentos %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ self.data_hora|date:"d/m/Y" }} - {{ self.data_hora|date:"l" }}</h5>
+            <p class="card-text">{{ self.already_gone|yesno:"Tempo esgotado,Horário disponível" }}</p>
+            <p class="card-text">Horário: {{ self.data_hora|time:"H:i" }}</p>
+            <p class="card-text">{{ self.estabelecimento }}</p>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}
