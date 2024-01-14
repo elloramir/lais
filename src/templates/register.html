@@ -7,42 +7,57 @@
 {% endblock %}
 
 {% block content %}
-<form method="post" class="form-login" action="{% url 'register' %}">
-	{% csrf_token %}
+<div class="centered-container">
+	<div class="card login-container">
 
-	<header class="login-header">
-		<h3>Auto cadastro</h3>
-	</header>
+		<div class="card-header bg-primary text-white py-2">
+			<h5 class="m-1">
+				<i class="bi bi-person-circle"></i>
+				<span>Auto cadastro</span>
+			</h5>
+		</div>
 
-	<div class="login-body">
-		<div class="form-field">
-			{% render_field form_candidato.nome_completo type="text" placeholder="Nome completo" %}
-		</div>
-		<div class="form-field">
-			{% render_field form_candidato.cpf type="text" placeholder="CPF" %}
-		</div>
-		<div class="form-field">
-			{% render_field form_candidato.data_nascimento type="date" %}
-		</div>
-		<div class="form-field">
-			<!-- {% render_field form_candidato.grupos_atendimento %} -->
-		</div>
-		<!-- TODO(ellora): Implement this field -->
-		<div class="form-field">
-			<span>Teve COVID nos últimos 30 dias?</span>
-			{% render_field form_candidato.teve_covid_recentemente %}
-		</div>
-		<div class="form-field">
-			{% render_field form_candidato.senha type="password" placeholder="Senha" %}
-		</div>
-		<div class="form-field">
-			{% render_field form_candidato.confirmacao_senha type="password" placeholder="Confirmar senha" %}
+		<div class="card-body py-2">
+			<form method="post" action="{% url 'register' %}">
+				{% csrf_token %}
+
+				<div class="form-group mt-2">
+					{% render_field form_candidato.nome_completo  class="form-control" placeholder="Nome" %}
+				</div>
+
+				<div class="form-group mt-2">
+					{% render_field form_candidato.cpf  class="form-control" placeholder="CPF" %}
+				</div>
+
+				<div class="form-group mt-2">
+					{% render_field form_candidato.senha type="password"  class="form-control" placeholder="Senha" %}
+				</div>
+
+				<div class="form-group mt-2">
+					{% render_field form_candidato.confirmacao_senha type="password"  class="form-control" placeholder="Senha" %}
+				</div>
+
+				<div class="form-group mt-2">
+					{% render_field form_candidato.data_nascimento type="date"  class="form-control" placeholder="Data de nascimento" %}
+				</div>
+
+				<div class="form-group mt-2">
+					{% render_field form_candidato.grupos_atendimento class="form-control" placeholder="Cargo" size="3" %}
+				</div>
+
+				<div class="form-check mt-2 px-2">
+					{% render_field form_candidato.teve_covid_recentemente %}
+					<label class="form-check-label" for="{{ form_candidato.teve_covid_recentemente.id_for_label }}">Teve COVID recentemente?</label>
+				</div>
+
+				<div class="d-flex mt-3 align-items-center justify-content-between">
+					<a href="{% url 'login' %}">Já possui cadastro?</a>
+					<button type="submit" class="btn btn-primary">Cadastrar</button>
+				</div>
+			</form>
 		</div>
 	</div>
+</div>
 
-	<footer class="login-footer">
-		<a href="{% url 'login' %}">Entrar na conta?</a>
-		<input type="submit" value="Cadastrar-se">
-	</footer>
-</form>
 {% endblock %}
+

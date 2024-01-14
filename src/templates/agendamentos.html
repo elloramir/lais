@@ -35,6 +35,8 @@
                     <td>{{ self.data_hora|time:"H:i" }}</td>
                     <td>{{ self.estabelecimento }}</td>
                 </tr>
+                {% empty %}
+                    <td colspan="4">Nenhum agendamento encontrado</td>
                 {% endfor %}
             </tbody>
         </table>

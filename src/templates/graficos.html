@@ -1,4 +1,4 @@
-{% extends 'index.html' %}
+{% extends 'app.html' %}
 
 {% block head %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -6,7 +6,6 @@
 
 <script>
 window.onload = function() {
-
     const barra = document.getElementById('barra').getContext('2d');
     const pizza = document.getElementById('pizza').getContext('2d');
 
@@ -42,46 +41,35 @@ window.onload = function() {
                 borderWidth: 1,
             }],
         },
-        options: {
-            plugins: {
-                datalabels: {
-                    formatter: (value, ctx) => {
-                        let sum = 0;
-                        let dataArr = ctx.chart.data.datasets[0].data;
-                        dataArr.map(data => {
-                            sum += data;
-                        });
-                        let percentage = (value*100 / sum).toFixed(2)+"%";
-                        return percentage;
-                    },
-                    color: '#fff',
-                }
-            }
-        }
     }));
 }
 </script>
 
 {% endblock %}
 
-{% block content %}
-<h1>Gráficos</h1>
+{% block app_content %}
 
-<!--CA#01: O sistema deve exibir gráfico em
-barra mostrando a quantidade de
-agendamentos por estabelecimento
-CA#02: O sistema deve exibir gráfico em
-pizza mostrando a quantidade de usuários
-cadastrados aptos ou inaptos para o
-agendamento
-CA#03: Caso um usuário não autenticado,
-ou sem a permissão de superusuário tente
-acessar a página, ele deve ser
-redirecionado à página inicial do sistema
-(História de Usuário #1) -->
-
-<canvas id="barra"></canvas>
-<canvas id="pizza"></canvas>
-
+<div class="row">
+    <div class="col-12 col-md-9">
+        <div class="card">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold">Gráfico de agendamentos</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="barra"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-3">
+        <div class="card">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold">Gráfico de usuários</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="pizza"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

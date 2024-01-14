@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 
 
 class Command(BaseCommand):
-	help = "Update the XML file"
+	help = "Update the list of Estabelecimento from the XML file"
 	# I don't know if it should be an argument or just a constant
 	url = "https://selecoes.lais.huol.ufrn.br/media/estabelecimentos_pr.xml"
 
@@ -28,16 +28,16 @@ class Command(BaseCommand):
 
 		# Create a list of Estabelecimento objects
 		estabelecimentos_obj = []
-		for estabelecimento in estabelecimentos:
+		for it in estabelecimentos:
 			estabelecimento_obj = models.Estabelecimento(
-				cnes=estabelecimento.find('co_cnes').text,
-				razao_social=estabelecimento.find('no_razao_social').text,
-				nome_fantasia=estabelecimento.find('no_fantasia').text,
-				logadouro=estabelecimento.find('no_logradouro').text,
-				endereco=estabelecimento.find('nu_endereco').text,
-				bairro=estabelecimento.find('no_bairro').text,
-				cep=estabelecimento.find('co_cep').text,
-				telefone=estabelecimento.find('nu_telefone').text,
+				cnes=it.find('co_cnes').text,
+				razao_social=it.find('no_razao_social').text,
+				nome_fantasia=it.find('no_fantasia').text,
+				logadouro=it.find('no_logradouro').text,
+				endereco=it.find('nu_endereco').text,
+				bairro=it.find('no_bairro').text,
+				cep=it.find('co_cep').text,
+				telefone=it.find('nu_telefone').text,
 			)
 			estabelecimentos_obj.append(estabelecimento_obj)
 

@@ -1,14 +1,5 @@
-/*
-	TODO(ellora):
-	Move to a separate file
-*/
-* {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
-}
-
 body {
+	overflow-y: scroll;
 	background-color: #eaeaea;
 	font-family: 'Helvetica', 'Arial', sans-serif;
 }
