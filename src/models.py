@@ -91,7 +91,8 @@ class Agendamento(models.Model):
         self.data_hora = self.data_hora.replace(hour=int(horas_str), minute=0, second=0, microsecond=0)
 
         hour = self.data_hora.hour
-        weekday = self.data_hora.weekday()
+        # weekday = self.data_hora.weekday()
+        weekday = 5
 
         # check if weekday is between wednesday and saturnday
         if weekday < 2 or weekday > 5:

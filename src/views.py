@@ -96,7 +96,7 @@ def profile(request):
 
 
 @require_GET
-@staff_member_required(login_url='login')
+@staff_member_required
 def estabelecimentos(request):
 	estabelecimentos = models.Estabelecimento.objects.all()
 	filter = forms.EstabelecimentoFilter(request.GET)
@@ -129,7 +129,7 @@ def agendamento(request):
 	time = form_agendamento.cleaned_data.get('horario')
 	agendamento = models.Agendamento()
 
-	if agendamento.scheduler(candidato, estabelecimento, "15"):
+	if agendamento.scheduler(candidato, estabelecimento, "13"):
 		print('Agendamento realizado com sucesso')
 	else:
 		print('Agendamento não pode ser realizado')
@@ -149,7 +149,7 @@ def agendamentos(request):
 
 
 @require_GET
-@staff_member_required(login_url='login')
+@staff_member_required
 def graficos(request):
 	estabelecimentos = models.Estabelecimento.objects.all()
 	labels = estabelecimentos.values_list('razao_social', flat=True)

@@ -12,10 +12,13 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
+
     path('profile/', views.profile, name='profile'),
     path('agendamento/', views.agendamento, name='agendamento'),
-    path('estabelecimentos/', views.estabelecimentos, name='estabelecimentos'),
     path('agendamentos/', views.agendamentos, name='agendamentos'),
+
+    # Super user routes
+    path('estabelecimentos/', views.estabelecimentos, name='estabelecimentos'),
     path('graficos/', views.graficos, name='graficos'),
 ]
 

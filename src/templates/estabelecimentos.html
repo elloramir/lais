@@ -1,6 +1,49 @@
-{% extends 'index.html' %}
+{% extends 'app.html' %}
+{% load widget_tweaks %}
 
-{% block content %}
+{% block app_content %}
+
+<div class="card">
+	<div class="card-header py-3">
+		<form method="GET">
+			{% csrf_token %}
+			<div class="row">
+				<div class="col-12 col-md-6">
+					<div class="input-group">
+						{% render_field filter.cnes class="form-control" placeholder="Número do CNES" %}
+						{% render_field filter.razao_social class="form-control" placeholder="Nome (Razão social)" %}
+						<button class="btn btn-outline-secondary" type="submit">
+							<i class="bi bi-search"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="card-body">
+		{% if estabelecimentos %}
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">CNES</th>
+					<th scope="col">Nome</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for estabelecimento in estabelecimentos %}
+				<tr>
+					<td>{{ estabelecimento.cnes }}</td>
+					<td>{{ estabelecimento.razao_social }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{% else %}
+		<p>Nenhum estabelecimento encontrado. Certifique-se de executar o "command" Django para autalizar os dados</p>
+		{% endif %}
+	</div>	
+</div>
+<!-- 
 <h1>Estabelecimentos</h1>
 
 <form method="get">
@@ -16,6 +59,6 @@
 	{% endfor %}
 {% else %}
 	<p>Nenhum estabelecimento cadastrado.</p>
-{% endif %}
+{% endif %} -->
 
 {% endblock %}

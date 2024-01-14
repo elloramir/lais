@@ -1,24 +1,87 @@
-{% extends 'index.html' %}
+{% extends 'app.html' %}
 {% load widget_tweaks %}
 {% load static %}
 
-{% block content %}
-<h1>Hello autenticated user</h1>
-<p>Nome: {{ candidato.nome_completo }}</p>
-<p>CPF: {{ candidato.cpf }}</p>
-<p>Data de nascimento: {{ candidato.data_nascimento }}, {{ candidato.idade }} anos</p>
-<p>{{ candidato.apto_agendamento|yesno:"Apto,Inapto" }} ao agendamento</p>
+{% block app_content %}
 
-<button onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+<div class="row">
+	<!-- Profile picture (actually just a static image to decorate) -->
+	<div class="col-12 col-md-3">
+		<div class="card bg-body-tertiary">
+			<div class="card-header p-0">
+				<img src="{% static 'images/profile.png' %}" class="card-img-top" alt="Profile picture">
+			</div>
+			<div class="card-body text-center">
+				<h5 class="card-title text-capitalize">{{ candidato.nome_completo }}</h5>
+				<!-- Okay for scheduling or not -->
+				{% if candidato.apto_agendamento %}
+					<span class="badge bg-success">Apto ao agendamento</span>
+				{% else %}
+					<span class="badge bg-danger">Inapto ao agendamento</span>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="col-12 col-md-9">
+		<!-- Personal information -->
+		<div class="card bg-body-tertiary">
+			<div class="card-header">
+				<h5 class="m-0">Dados pessoais</h5>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<label class="col-12 col-md-3 col-form-label">Nome completo</label>
+					<div class="col-12 col-md-9">
+						<input type="text" class="form-control" value="{{ candidato.nome_completo }}" disabled>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<label class="col-12 col-md-3 col-form-label">CPF</label>
+					<div class="col-12 col-md-9">
+						<input type="text" class="form-control" value="{{ candidato.cpf }}" disabled>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<label class="col-12 col-md-3 col-form-label">Data de nascimento</label>
+					<div class="col-12 col-md-9">
+						<input type="text" class="form-control" value="{{ candidato.data_nascimento }} ({{ candidato.idade }} anos)" disabled>
+					</div>
+				</div>
+			</div>
+		</div>
 
-{% if candidato.apto_agendamento %}
-<h2>Agendamento</h2>
-<form method="POST" action="{% url 'agendamento' %}">
-	{% csrf_token %}
-	{% render_field form_agendamento.estabelecimento %}
-	{% render_field form_agendamento.horario %}
-	<button type="submit">Agendar</button>
-</form>
-{% endif %}
+		{% if candidato.apto_agendamento %}
+		<!-- Scheduling for COVID-19 test -->
+		<div class="card bg-body-tertiary mt-3">
+			<div class="card-header">
+				<h5 class="m-0">Agendamento</h5>
+			</div>
+			<div class="card-body">
+				<form method="POST" action="{% url 'agendamento' %}">
+					{% csrf_token %}
+					<div class="row">
+						<label class="col-12 col-md-3 col-form-label">Estabelicimento</label>
+						<div class="col-12 col-md-9">
+							{% render_field form_agendamento.estabelecimento class="form-control" %}
+						</div>
+					</div>
+					<div class="row mt-2">
+						<label class="col-12 col-md-3 col-form-label">Horários</label>
+						<div class="col-12 col-md-9">
+							{% render_field form_agendamento.horario class="form-control" %}
+						</div>
+					</div>
+					<div class="d-flex justify-content-end mt-2">
+						<button type="submit" class="btn btn-primary" title="Ao clicar, você irá se cadastrar para o agendamento">
+							<span>Agendar</span>
+							<i class="bi bi-check-circle-fill"></i>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+</div>
 
 {% endblock %}

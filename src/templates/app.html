@@ -1,0 +1,55 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+	<div class="container d-flex">
+	<a class="navbar-brand" href="#">LAIS</a>
+	<div role="links" class="collapse navbar-collapse">
+		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+			{% if not user.is_superuser %}
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'profile' %}">
+					<i class="bi bi-person-circle"></i>
+					<span>Perfil</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'agendamentos' %}">
+					<i class="bi bi-calendar-check"></i>
+					<span>Agendamentos</span>
+				</a>
+			</li>
+			{% else %}
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'estabelecimentos' %}">
+					<i class="bi bi-building"></i>
+					<span>Estabelecimentos</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'graficos' %}">
+					<i class="bi bi-bar-chart"></i>
+					<span>Gráficos</span>
+				</a>
+			</li>
+			{% endif %}
+		</ul>
+
+		<form action="{% url 'logout' %}">
+			{% csrf_token %}
+			<button class="btn btn-outline-danger" type="submit">
+				<span>Logout</span>
+				<i class="bi bi-box-arrow-right"></i>
+			</button>
+		</form>
+	</div>
+	</div>
+</nav>
+
+<div class="container mt-5">
+	{% block app_content %} {% endblock %}
+</div>
+
+{% endblock %}

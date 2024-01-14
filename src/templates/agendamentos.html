@@ -1,17 +1,44 @@
-{% extends 'index.html' %}
+{% extends 'app.html' %}
 
-{% block content %}
-<h1>Agendamentos</h1>
+{% block app_content %}
 
-{% for self in agendamentos %}
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">{{ self.data_hora|date:"d/m/Y" }} - {{ self.data_hora|date:"l" }}</h5>
-            <p class="card-text">{{ self.already_gone|yesno:"Tempo esgotado,Horário disponível" }}</p>
-            <p class="card-text">Horário: {{ self.data_hora|time:"H:i" }}</p>
-            <p class="card-text">{{ self.estabelecimento }}</p>
-        </div>
+<div class="card mb-3">
+    <div class="card-header py-3">
+        <h5 class="m-0">
+            <i class="bi bi-calendar-check"></i>
+            <span>Lista de agendamentos</span>
+        </h5>
     </div>
-{% endfor %}
+
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Data</th>
+                    <th>Horário</th>
+                    <th>Estabelecimento</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for self in agendamentos %}
+                <tr class="align-middle">
+                    <td>
+                        {% if self.already_gone %}
+					        <span class="badge bg-success">Agendado</span>
+                        {% else %}
+					        <span class="badge bg-danger">Expirado</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ self.data_hora|date:"d/m/Y" }} - {{ self.data_hora|date:"l" }}</td>
+                    <td>{{ self.data_hora|time:"H:i" }}</td>
+                    <td>{{ self.estabelecimento }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}

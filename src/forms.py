@@ -86,7 +86,8 @@ class Agendamento(forms.ModelForm):
 
     def fix_horario(self, candidato):
         age = candidato.idade()
-        hour = timezone.now().hour
+        # hour = timezone.now().hour
+        hour = 11
         horarios = []
         if age >= 18 and age <= 29 and hour <= 13: horarios.append('13:00')
         if age >= 30 and age <= 39 and hour <= 14: horarios.append('14:00')
