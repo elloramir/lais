@@ -10,7 +10,6 @@ NOT_ALLOWED_GROUPS = [
 ]
 
 
-# TODO(ellora): populate this table with the XML data
 class GrupoAtendimento(models.Model):
     nome = models.CharField(max_length=255, unique=True)
 

@@ -5,6 +5,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
 from django.contrib.auth import models as auth_models, logout as auth_logout
 from django.db.models import Count as model_Count
+from django.contrib import messages
 from json import dumps as json_dumps
 
 from . import forms
@@ -40,9 +41,10 @@ def login(request):
 			if request.user.is_staff and next_page == 'profile':
 				next_page = 'estabelecimentos'
 
+			messages.success(request, 'Login efetuado com sucesso!')
 			return redirect(next_page)
 		else:
-			print(form_login.errors)
+			messages.error(request, form_login.errors)
 
 	return render(request, 'login.html', {
 		'form_login': form_login
@@ -74,9 +76,10 @@ def register(request):
 			candidato.user.save()
 			candidato.save()
 
+			messages.success(request, 'Cadastro efetuado com sucesso!')
 			return redirect('login')
 		else:
-			print(form_candidato.errors)
+			messages.error(request, form_candidato.errors)
 
 	return render(request, 'register.html', {
 		'form_candidato': form_candidato
@@ -131,10 +134,11 @@ def agendamento(request):
 			agendamento = models.Agendamento()
 
 			agendamento.scheduler(candidato, estabelecimento, horario)
+			messages.success(request, 'Agendamento efetuado com sucesso!')
 		except models.Agendamento.ValidationError as e:
-			print(e)
+			messages.error(request, e)
 	else:
-		print(form_agendamento.errors)
+		messages.error(request, form_agendamento.errors)
 
 	return redirect('profile')
 

@@ -64,11 +64,6 @@ class Candidato(forms.ModelForm):
         if not cpf_validator(cpf):
             self.add_error('cpf', 'CPF inválido')
             return False
-        
-        # CPF value most be unique
-        if models.Candidato.objects.filter(cpf=cpf).exists():
-            self.add_error('cpf', 'CPF já cadastrado')
-            return False
 
         return True
 
