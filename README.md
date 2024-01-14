@@ -9,7 +9,7 @@ docker compose up --build
 - Raw system environment
 ```sh
 pip install -r requirements.txt
-python manager.py runserver server
+python manager.py runserver
 ```
 
 ### Extra steps
