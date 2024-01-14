@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
 from django.contrib.auth import models as auth_models, logout as auth_logout
+from django.db.models import Count as model_Count
 from json import dumps as json_dumps
 
 from . import forms
@@ -87,7 +88,7 @@ def register(request):
 def profile(request):
 	candidato = models.Candidato.objects.get(user=request.user)
 	form_agendamento = forms.Agendamento()
-	form_agendamento.fix_horario(candidato)
+	form_agendamento.cleanup_choises(candidato)
 
 	return render(request, 'profile.html', {
 		'candidato': candidato,
@@ -122,17 +123,18 @@ def agendamento(request):
 		return redirect('profile')
 
 	form_agendamento = forms.Agendamento(request.POST)
+	
+	if form_agendamento.is_valid():
+		try:
+			estabelecimento = form_agendamento.cleaned_data.get('estabelecimento')
+			horario = form_agendamento.cleaned_data.get('horario')
+			agendamento = models.Agendamento()
 
-	form_agendamento.is_valid()
-	# if form_agendamento.is_valid():
-	estabelecimento = form_agendamento.cleaned_data.get('estabelecimento')
-	time = form_agendamento.cleaned_data.get('horario')
-	agendamento = models.Agendamento()
-
-	if agendamento.scheduler(candidato, estabelecimento, "13"):
-		print('Agendamento realizado com sucesso')
+			agendamento.scheduler(candidato, estabelecimento, horario)
+		except models.Agendamento.ValidationError as e:
+			print(e)
 	else:
-		print('Agendamento não pode ser realizado')
+		print(form_agendamento.errors)
 
 	return redirect('profile')
 
@@ -151,33 +153,26 @@ def agendamentos(request):
 @require_GET
 @staff_member_required
 def graficos(request):
-	estabelecimentos = models.Estabelecimento.objects.all()
-	labels = estabelecimentos.values_list('razao_social', flat=True)
-	data = []
+	# Estabelecimentos labels and data
+	all_estab = models.Estabelecimento.objects.all()
+	estab_labels = [estab.razao_social for estab in all_estab]
+	estab_data = [estab.agendamento_count() for estab in all_estab]
 
-	for it in estabelecimentos:
-		data.append(it.agendamento_set.count())
-
+	# Candidatos data (don't need labels, because it's just two values)
 	candidatos = models.Candidato.objects.all()
-	aptos_and_not = [0, 0]
-
-	for it in candidatos:
-		if it.apto_agendamento():
-			aptos_and_not[0] += 1
-		else:
-			aptos_and_not[1] += 1
-
-
+	aptos_count = sum(1 for candidato in candidatos if candidato.apto_agendamento())
+	not_aptos_count = candidatos.count() - aptos_count
+	aptos_and_not = [aptos_count, not_aptos_count]
 
 	# This is not the fastest way to do dump those lists,
 	# but it's safe enough and will be only accessed by staff
 	# (which is a very small group of users).
-	str_labels = json_dumps(list(labels))
-	str_data = json_dumps(data)
+	str_estab_labels = json_dumps(estab_labels)
+	str_estab_data = json_dumps(estab_data)
 	str_aptos_and_not = json_dumps(aptos_and_not)
 
 	return render(request, 'graficos.html', {
-		'labels': str_labels,
-		'data': str_data,
-		'aptos_and_not': str_aptos_and_not
+		'estab_labels': str_estab_labels,
+		'estab_data': str_estab_data,
+		'aptos_data': str_aptos_and_not
 	})

@@ -12,21 +12,17 @@ window.onload = function() {
     (new Chart(barra, {
         type: 'bar',
         data: {
-            labels: {{ labels|safe }},
+            labels: {{ estab_labels|safe }},
             datasets: [{
                 label: 'Agendamentos',
-                data: {{ data|safe }},
+                data: {{ estab_data|safe }},
                 borderWidth: 1,
             }],
         },
         options: {
             scales: {
-                y: {
-                    beginAtZero: true,
-                },
-                x: {
-                    display: false
-                }
+                y: { beginAtZero: true, },
+                x: { display: false }
             },
         }
     }));
@@ -37,7 +33,7 @@ window.onload = function() {
             labels: ['Aptos', 'Inaptos'],
             datasets: [{
                 label: 'Usuários',
-                data: {{ aptos_and_not|safe }},
+                data: {{ aptos_data|safe }},
                 borderWidth: 1,
             }],
         },

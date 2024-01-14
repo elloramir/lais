@@ -1,7 +1,10 @@
 from django import forms
 from django.utils import timezone
+from validate_docbr import CPF
 
 from . import models
+
+cpf_validator = CPF().validate
 
 
 class Login(forms.Form):
@@ -44,27 +47,25 @@ class Candidato(forms.ModelForm):
         if not valid:
             return False
 
-        # validate "data_nascimento" to disallow future dates and today
+        # future dates and today are invalid
         data_nascimento = self.cleaned_data.get('data_nascimento')
-        if data_nascimento >= timezone.now().date():
+        if data_nascimento >= timezone.localtime().date():
             self.add_error('data_nascimento', 'Data de nascimento inválida')
             return False
 
-        # validate "senha" and "confirmacao_senha"
+        # passwords must match
         senha = self.cleaned_data.get('senha')
         confirmacao_senha = self.cleaned_data.get('confirmacao_senha')
         if senha != confirmacao_senha:
             self.add_error('senha', 'As senhas não coincidem')
             return False
 
-        # TODO: (ellora) real validation of "CPF"
-        # validate "CPF"
         cpf = self.cleaned_data.get('cpf')
-        if not len(cpf) == 11:
+        if not cpf_validator(cpf):
             self.add_error('cpf', 'CPF inválido')
             return False
-
-        # validate "CPF" uniqueness
+        
+        # CPF value most be unique
         if models.Candidato.objects.filter(cpf=cpf).exists():
             self.add_error('cpf', 'CPF já cadastrado')
             return False
@@ -78,23 +79,28 @@ class EstabelecimentoFilter(forms.Form):
 
 
 class Agendamento(forms.ModelForm):
-    horario = forms.ChoiceField(required=True)
+    horario = forms.ChoiceField(required=True, choices=models.Agendamento.CHOISES)
 
     class Meta:
         model = models.Agendamento
         fields = ['estabelecimento']
 
-    def fix_horario(self, candidato):
+
+    def cleanup_choises(self, candidato):
         age = candidato.idade()
-        # hour = timezone.now().hour
-        hour = 11
-        horarios = []
-        if age >= 18 and age <= 29 and hour <= 13: horarios.append('13:00')
-        if age >= 30 and age <= 39 and hour <= 14: horarios.append('14:00')
-        if age >= 40 and age <= 49 and hour <= 15: horarios.append('15:00')
-        if age >= 50 and age <= 59 and hour <= 16: horarios.append('16:00')
-        if age >= 60: horarios.append('17:00')
+        now = timezone.localtime()
+        hour = now.hour
 
-        sufix = timezone.now().strftime(' - %A de %B de %Y')
-        self.fields['horario'].choices = [(h, h+sufix) for h in horarios]
+        selected_hour = 0
+        if   age >= 18 and age <= 29 and hour <= 13: selected_hour = 0
+        elif age >= 30 and age <= 39 and hour <= 14: selected_hour = 1
+        elif age >= 40 and age <= 49 and hour <= 15: selected_hour = 2
+        elif age >= 50 and age <= 59 and hour <= 16: selected_hour = 3
+        elif age >= 60 and hour < 17: selected_hour = 4
 
+        sufix = now.strftime(' - %A de %B de %Y')
+
+        self.fields['horario'].choices = [(
+            selected_hour,
+            models.Agendamento.CHOISES[selected_hour][1] + sufix
+        )]
