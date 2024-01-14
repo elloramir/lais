@@ -3,19 +3,19 @@ You can use Docker to run the project in the context of Postgres, or just run it
 
 - With Docker container (it will automatically build and run the system)
 ```sh
-docker compose --build
+docker compose up --build
 ```
 
 - Raw system environment
 ```sh
 pip install -r requirements.txt
-python manager.py execution server
+python manager.py runserver server
 ```
 
 ### Extra steps
 You will also need a superuser to access the dashboard. There are two commands to update some choice data, one for "Grupos de Serviço" and another for "Estabelecimentos"
 ```sh
-python manager.py createsuperusuário
+python manager.py createsuperuser
 python manager.py update_grupos
 python manager.py update_estabelecimentos
 ```
