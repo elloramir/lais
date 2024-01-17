@@ -147,7 +147,7 @@ def agendamento(request):
 @login_required
 def agendamentos(request):
 	candidato = models.Candidato.objects.get(user=request.user)
-	agendamentos = models.Agendamento.objects.filter(candidato=candidato)
+	agendamentos = models.Agendamento.objects.filter(candidato=candidato).order_by('-data_hora')
 
 	return render(request, 'agendamentos.html', {
 		'agendamentos': agendamentos

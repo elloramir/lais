@@ -26,9 +26,9 @@
                 <tr class="align-middle">
                     <td>
                         {% if self.already_gone %}
-					        <span class="badge bg-success">Agendado</span>
-                        {% else %}
 					        <span class="badge bg-danger">Expirado</span>
+                        {% else %}
+					        <span class="badge bg-success">Agendado</span>
                         {% endif %}
                     </td>
                     <td>{{ self.data_hora|date:"d/m/Y" }} - {{ self.data_hora|date:"l" }}</td>

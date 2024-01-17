@@ -96,6 +96,6 @@ class Agendamento(forms.ModelForm):
         sufix = now.strftime(' - %A de %B de %Y')
 
         self.fields['horario'].choices = [(
-            selected_hour,
+            models.Agendamento.CHOISES[selected_hour][0],
             models.Agendamento.CHOISES[selected_hour][1] + sufix
         )]

@@ -95,11 +95,11 @@ class Agendamento(models.Model):
     # choises between the "Agendamento" model and the "Agendamento" form
     # TODO(ellora): Move to forms.py and then import here?
     CHOISES = [
-        (0, '13:00'),
-        (1, '14:00'),
-        (2, '15:00'),
-        (3, '16:00'),
-        (4, '17:00'),
+        (13, '13:00'),
+        (14, '14:00'),
+        (15, '15:00'),
+        (16, '16:00'),
+        (17, '17:00'),
     ]
 
 
@@ -117,7 +117,11 @@ class Agendamento(models.Model):
         self.candidato = candidato
         self.estabelecimento = estabelecimento
         # "horario" comes from the "Agendamento Form", so it's esentially a string
-        self.data_hora = timezone.datetime.strptime(Agendamento.CHOISES[int(horario)][1], '%H:%M')
+        self.data_hora = timezone.localtime().replace(
+            hour=int(horario),
+            minute=0,
+            second=0,
+            microsecond=0)
 
         # check if weekday is between wednesday and saturnday
         weekday = self.data_hora.weekday()
